@@ -64,7 +64,7 @@ function! s:source.gather_candidates(args, context) "{{{
     let a:context.is_async = 1
   endif
 
-  if a:context.source__target == '/'
+  if a:context.source__target == ['/']
     " Do not specify source target directory
     let cmdline = printf('git grep -n --no-color %s %s',
       \   a:context.source__extra_opts,

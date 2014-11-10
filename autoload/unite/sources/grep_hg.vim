@@ -65,7 +65,7 @@ function! s:source.gather_candidates(args, context) "{{{
     let a:context.is_async = 1
   endif
 
-  if a:context.source__target == '/'
+  if a:context.source__target == ['/']
     " Do not specify source target
     let cmdline = printf('hg grep -n %s %s',
       \   a:context.source__extra_opts,
