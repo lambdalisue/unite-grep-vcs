@@ -82,14 +82,20 @@ Sources					*unite-grep-vcs-unite-interface-sources*
 unite/sources/grep/git
 	Candidates from 'git grep' command. It will fail if the specified
 	directory is not in git repository.
+	If '/' is specified as source target, it will execute git grep on the
+	repository.
 >
 		:Unite grep/git:.
+		:Unite grep/git:/
 <
 						*unite/sources/grep/hg*
 unite/sources/grep/hg
 	Candidates from 'hg grep' command. It will fail if the specified
 	directory is not in marcurial directory.
+	If '/' is specified as source target, it will execute hg grep on the
+	repository.
 >
 		:Unite grep/hg:.
+		:Unite grep/hg:/
 <
 vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl:noet

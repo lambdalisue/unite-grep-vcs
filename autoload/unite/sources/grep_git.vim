@@ -64,12 +64,21 @@ function! s:source.gather_candidates(args, context) "{{{
     let a:context.is_async = 1
   endif
 
-  let cmdline = printf('git grep -n --no-color %s %s -- %s',
-    \   a:context.source__extra_opts,
-    \   string(a:context.source__input),
-    \   join(map(a:context.source__target,
-    \           "substitute(v:val, '/$', '', '')")),
-    \)
+  if a:context.source__target == '/'
+    " Do not specify source target directory
+    let cmdline = printf('git grep -n --no-color %s %s',
+      \   a:context.source__extra_opts,
+      \   string(a:context.source__input),
+      \)
+  else
+    let cmdline = printf('git grep -n --no-color %s %s -- %s',
+      \   a:context.source__extra_opts,
+      \   string(a:context.source__input),
+      \   join(map(a:context.source__target,
+      \           "substitute(v:val, '/$', '', '')")),
+      \)
+  endif
+
   if a:context.source__ssh_path != ''
     " Use ssh command.
     let [hostname, port] =

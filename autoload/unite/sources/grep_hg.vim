@@ -65,12 +65,21 @@ function! s:source.gather_candidates(args, context) "{{{
     let a:context.is_async = 1
   endif
 
-  let cmdline = printf('hg grep -n %s %s %s',
-    \   a:context.source__extra_opts,
-    \   string(a:context.source__input),
-    \   join(map(a:context.source__target,
-    \           "substitute(v:val, '/$', '', '')")),
-    \)
+  if a:context.source__target == '/'
+    " Do not specify source target
+    let cmdline = printf('hg grep -n %s %s',
+      \   a:context.source__extra_opts,
+      \   string(a:context.source__input),
+      \)
+  else
+    let cmdline = printf('hg grep -n %s %s %s',
+      \   a:context.source__extra_opts,
+      \   string(a:context.source__input),
+      \   join(map(a:context.source__target,
+      \           "substitute(v:val, '/$', '', '')")),
+      \)
+  endif
+
   if a:context.source__ssh_path != ''
     " Use ssh command.
     let [hostname, port] =
