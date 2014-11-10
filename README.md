@@ -1,5 +1,7 @@
 unite-grep-vcs
 ===============================================================================
+![unite-grep-vcs interface (screencast)](./doc/screencast-001.gif)
+
 Version: 0.1.0
 Support: Vim 7.3 and above (Let me know if there are issues)
 
