@@ -14,6 +14,9 @@ function! unite#sources#grep_git#define() "{{{
 endfunction "}}}
 
 function! unite#sources#grep_git#is_available() "{{{
+  if !executable('git')
+    return 0
+  endif
   call unite#util#system('git rev-parse')
   return (unite#util#get_last_status() == 0) ? 1 : 0
 endfunction "}}}

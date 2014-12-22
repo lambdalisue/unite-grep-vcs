@@ -14,6 +14,9 @@ function! unite#sources#grep_hg#define() "{{{
 endfunction "}}}
 
 function! unite#sources#grep_hg#is_available() "{{{
+  if !executable('hg')
+    return 0
+  endif
   call unite#util#system('hg root')
   return (unite#util#get_last_status() == 0) ? 1 : 0
 endfunction "}}}
@@ -80,15 +83,6 @@ function! s:source.gather_candidates(args, context) "{{{
       \)
   endif
 
-  if a:context.source__ssh_path != ''
-    " Use ssh command.
-    let [hostname, port] =
-          \ unite#sources#ssh#parse_path(a:context.source__ssh_path)[:1]
-    let cmdline = substitute(substitute(
-          \ g:unite_kind_file_ssh_command . ' ' . cmdline,
-          \   '\<HOSTNAME\>', hostname, 'g'), '\<PORT\>', port, 'g')
-  endif
-
   call unite#print_source_message('Command-line: ' . cmdline, s:source.name)
 
   " Note:
@@ -140,14 +134,9 @@ function! s:source.async_gather_candidates(args, context) "{{{
           \   'action__text' : join(candidate[1][3:], ':'),
           \ }
 
-    if a:context.source__ssh_path != ''
-      let dict.action__path =
-            \ a:context.source__ssh_path . dict.action__path
-    else
-      let dict.action__path =
-            \ unite#util#substitute_path_separator(
-            \   fnamemodify(dict.action__path, ':p'))
-    endif
+    let dict.action__path =
+          \ unite#util#substitute_path_separator(
+          \   fnamemodify(dict.action__path, ':p'))
 
     let dict.word = printf('%s:%s:%s',
           \  unite#util#substitute_path_separator(
