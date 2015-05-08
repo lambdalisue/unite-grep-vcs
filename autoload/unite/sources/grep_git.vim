@@ -56,7 +56,7 @@ function! s:source.gather_candidates(args, context) "{{{
     return []
   endif
 
-  if empty(a:context.source__target)
+  if empty(a:context.source__targets)
         \ || a:context.source__input == ''
     call unite#print_source_message('Canceled.', s:source.name)
     let a:context.is_async = 0
@@ -67,7 +67,7 @@ function! s:source.gather_candidates(args, context) "{{{
     let a:context.is_async = 1
   endif
 
-  if a:context.source__target == ['/']
+  if a:context.source__targets == ['/']
     " Do not specify source target directory
     let cmdline = printf('git grep -n --no-color %s %s',
       \   a:context.source__extra_opts,
@@ -77,8 +77,7 @@ function! s:source.gather_candidates(args, context) "{{{
     let cmdline = printf('git grep -n --no-color %s %s -- %s',
       \   a:context.source__extra_opts,
       \   string(a:context.source__input),
-      \   join(map(a:context.source__target,
-      \           "substitute(v:val, '/$', '', '')")),
+      \   unite#helper#join_targets(a:context.source__targets),
       \)
   endif
 
