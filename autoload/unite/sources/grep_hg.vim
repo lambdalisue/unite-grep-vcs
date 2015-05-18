@@ -20,6 +20,13 @@ function! unite#sources#grep_hg#is_available() "{{{
   call unite#util#system('hg root')
   return (unite#util#get_last_status() == 0) ? 1 : 0
 endfunction "}}}
+function! unite#sources#grep_hg#repository_root() "{{{
+  if !executable('hg')
+    return ''
+  endif
+  let stdout = unite#util#system('hg root')
+  return (unite#util#get_last_status() == 0) ? stdout : ''
+endfunction "}}}
 
 " Inherit from 'grep' source
 let s:origin = unite#sources#grep#define()
@@ -33,6 +40,10 @@ function! s:source.hooks.on_init(args, context) "{{{
           \ 'The directory is not in marcurial repository.',
           \ s:source.name)
     return
+  endif
+  if get(a:args, 0, '') ==# '/'
+    " the behaviour of 'Unite grep' has changed from aa6afa9.
+    let a:args[0] = unite#sources#grep_hg#repository_root()
   endif
   return s:origin.hooks.on_init(a:args, a:context)
 endfunction " }}}
@@ -68,20 +79,11 @@ function! s:source.gather_candidates(args, context) "{{{
     let a:context.is_async = 1
   endif
 
-  if a:context.source__targets == ['/']
-    " Do not specify source target
-    let cmdline = printf('hg grep -n %s %s',
-      \   a:context.source__extra_opts,
-      \   string(a:context.source__input),
-      \)
-  else
-    let cmdline = printf('hg grep -n %s %s %s',
-      \   a:context.source__extra_opts,
-      \   string(a:context.source__input),
-      \   unite#helper#join_targets(a:context.source__targets),
-      \)
-  endif
-
+  let cmdline = printf('hg grep -n %s %s %s',
+    \   a:context.source__extra_opts,
+    \   string(a:context.source__input),
+    \   unite#helper#join_targets(a:context.source__targets),
+    \)
   call unite#print_source_message('Command-line: ' . cmdline, s:source.name)
 
   " Note:
