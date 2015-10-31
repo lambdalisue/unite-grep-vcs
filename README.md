@@ -5,6 +5,9 @@ unite-grep-vcs
 Version: 0.1.0
 Support: Vim 7.3 and above (Let me know if there are issues)
 
+**NOTE**
+`grep/git` source is now moved into the [unite](https://github.com/Shougo/unite.vim) from [this](https://github.com/Shougo/unite.vim/commit/91acd3b8b1744e6f379420ff68d8b632d2e0c149) commit.
+
 *unite-grep-vcs* is an [unite](https://github.com/Shougo/unite.vim) source package plugin for 'git grep' or 'hg grep'.
 There is a similar plugin called [sgur/unite-git_grep](https://github.com/sgur/unite-git_grep). and the difference are: 
 
